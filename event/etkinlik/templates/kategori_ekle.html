@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load widget_tweaks %}
+<div class="container mt-5">
+    <h2 class="text-center">Kategori Ekle</h2>
+    <form method="post" action="{% url 'kategori_ekle' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_name">Kategori Adı</label>
+            {{ form.name|add_class:"form-control" }}
+        </div>
+        <button type="submit" class="btn btn-primary">Ekle</button>
+    </form>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% load custom_filters %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.name }}" style="max-width: 100%; height: auto;">
+        <div class="card-body">
+            <h5 class="card-title">{{ event.name }}</h5>
+            <p class="card-text">Date: {{ event.date }}</p>
+            <p class="card-text">Price: ${{ event.price }}</p>
+            <p class="card-text">Location: {{ event.location }}</p>
+            <a href="{% url 'home' %}" class="btn btn-primary">Etkinlik Listesine Geri Dön</a>
+        </div>
+    </div>
+</div>
+
+<div style="margin-bottom: 40px;"></div>
+
+<div class="container mt-5">
+    <div class="alert alert-secondary" role="alert">
+        <p class="card-text">Açıklama: <br> {{ event.description }}</p>
+    </div>
+</div>
+
+
+<div class="container mt-5">
+    <h2>Yorumlar</h2>
+    {% for yorum in yorumlar %}
+    <div class="card my-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ yorum.isim|slice:":1" }}. {{ yorum.soyisim|slice:":1" }}.</h5>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="stars">
+                    {% for i in "12345" %}
+                    {% if yorum.puan|add:"0" >= i %}
+                    <i class="bi bi-star-fill"></i>
+                    {% else %}
+                    <i class="bi bi-star"></i>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <p class="card-text">{{ yorum.yorum }}</p>
+        </div>
+    </div>
+    {% empty %}
+    <p>Henüz yorum bulunmamaktadır.</p>
+    {% endfor %}
+</div>
+
+
+<div class="container mt-5">
+    <h2>Yorum Yap</h2>
+    <form method="post" action="{% url 'event_detail' event_id=event.id %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="isim">İsim:</label>
+            <input type="text" class="form-control" id="isim" name="isim" placeholder="İsminiz">
+        </div>
+        <div class="form-group">
+            <label for="puan">Puan:</label>
+            <select class="form-control" id="puan" name="puan">
+                <option value="1">★</option>
+                <option value="2">★★</option>
+                <option value="3">★★★</option>
+                <option value="4">★★★★</option>
+                <option value="5">★★★★★</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="yorum">Yorum:</label>
+            <textarea class="form-control" id="yorum" name="yorum" rows="3" placeholder="Yorumunuz"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Gönder</button>
+    </form>
+</div>
+
+{% endblock %}
+
+
+
